@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>وجهتي | بوابة المسؤول</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@500;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .login-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; background: var(--paper); }
+    .login-card { background: #fff; border: 1px solid var(--sand); border-radius: 16px; padding: 40px; max-width: 440px; width: 100%; box-shadow: 0 10px 30px rgba(14,27,35,0.04); text-align: center; }
+    .login-card h2 { font-family: var(--ar-display); color: var(--night); margin-bottom: 12px; font-weight: 900; }
+    .login-card p { font-family: var(--ar-body); color: var(--ink-soft); font-size: 14px; margin-bottom: 30px; }
+    .form-group { margin-bottom: 20px; text-align: right; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--night); margin-bottom: 8px; }
+    .form-group input { width: 100%; padding: 14px; border: 1px solid var(--sand); background: var(--paper); border-radius: 8px; font-family: var(--ar-body); color: var(--ink); transition: all 0.3s var(--ease); }
+    .form-group input:focus { border-color: var(--gold); outline: none; background: #fff; }
+    .login-btn { background: var(--night); color: var(--sand); font-weight: 700; font-family: var(--ar-body); padding: 14px; width: 100%; border-radius: 8px; margin-top: 10px; transition: all 0.25s; }
+    .login-btn:hover { background: var(--gold); color: var(--night); }
+  </style>
+</head>
+<body>
+
+<section class="login-section">
+  <div class="login-card">
+    <h2>بوابة الإدارة</h2>
+    <p>الموقع متاح للتصفح الكامل للزوار. هذه الواجهة مخصصة للتحقق من هوية المسؤول فقط.</p>
+    
+    <form id="loginForm">
+      <div class="form-group">
+        <label>البريد الإلكتروني للمسؤول</label>
+        <input type="email" id="loginEmail" placeholder="example@wajhaty.com" required>
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="login-btn">تسجيل الدخول</button>
+    </form>
+  </div>
+</section>
+
+<script type="module">
+  import { auth, signInWithEmailAndPassword } from "./firebase-config.js";
+
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    // التأكد من الإيميل أولاً لضمان عدم دخول مستخدمين آخرين
+    if (email !== "wajhaty.info@gmail.com") {
+      alert("عذراً، هذا الحساب لا يملك صلاحيات الإدارة المخصصة لوجهتي.");
+      return;
+    }
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        window.location.href = "admin.html";
+      })
+      .catch((error) => {
+        alert("خطأ في كلمة المرور أو البريد الإلكتروني المحمي!");
+      });
+  });
+</script>
+
+</body>
+</html>

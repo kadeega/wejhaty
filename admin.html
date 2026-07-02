@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>وجهتي | لوحة تحكم الإدارة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+        font-family: 'Tajawal', 'Segoe UI', sans-serif;
+        background-color: #FAF7F2; /* لون الـ paper المعتمد في هوية وجهتي */
+        margin: 0;
+        padding: 0;
+        color: #0E1B23; /* لون الـ night الداكن */
+    }
+
+    .admin-nav { 
+        background: #0E1B23; 
+        padding: 15px 30px; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        color: #FAF7F2; 
+    }
+
+    .logout-btn { 
+        background: transparent;
+        border: 1px solid #C8893B; 
+        padding: 8px 18px; 
+        border-radius: 6px; 
+        color: #C8893B; 
+        font-size: 14px; 
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s ease; 
+    }
+
+    .logout-btn:hover { 
+        background: #C8893B; 
+        color: #0E1B23; 
+    }
+
+    .admin-wrapper { 
+        max-width: 650px; 
+        margin: 40px auto; 
+        padding: 0 20px; 
+    }
+
+    /* أزرار التبديل العلوية (Tabs) */
+    .admin-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        background-color: #F2E9DA;
+        color: #0E1B23;
+        border: 1px solid #E4D5BE;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .tab-btn.active {
+        background-color: #C8893B; /* اللون الذهبي النشط */
+        color: #ffffff;
+        border-color: #C8893B;
+    }
+
+    /* حاويات النماذج */
+    .admin-form-panel {
+        display: none; /* مخفي تلقائياً */
+        background-color: #ffffff;
+        border: 1px solid #F2E9DA;
+        border-radius: 14px;
+        padding: 35px;
+        box-shadow: 0 8px 32px rgba(14, 27, 35, 0.04);
+    }
+
+    .admin-form-panel.active {
+        display: block; /* يظهر النموذج النشط فقط */
+    }
+
+    .admin-form-panel h3 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #0E1B23;
+        margin-top: 0;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #FAF7F2;
+        padding-bottom: 12px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column; 
+        align-items: stretch;
+        margin-bottom: 22px;
+        width: 100%;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0E1B23;
+        margin-bottom: 8px;
+        display: block;
+        text-align: right;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 15px;
+        border: 1px solid #F2E9DA;
+        border-radius: 8px;
+        background-color: #FAF7F2;
+        color: #1A1410;
+        font-family: inherit;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+    }
+
+    /* دعم اتجاه الحقول حسب اللغة */
+    .form-group input[id*="En"], 
+    .form-group textarea[id*="En"],
+    .form-group input[id*="Slug"] {
+        direction: ltr;
+        text-align: left;
+    }
+
+    .form-group input[id*="Ar"], 
+    .form-group textarea[id*="Ar"] {
+        direction: rtl;
+        text-align: right;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #C8893B;
+        background-color: #ffffff;
+        outline: none;
+        box-shadow: 0 0 8px rgba(200, 137, 59, 0.15);
+    }
+
+    .save-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #ffffff;
+        background-color: #C8893B;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .save-btn:hover {
+        background-color: #A36D2E;
+    }
+  </style>
+</head>
+<body>
+
+<header class="admin-nav">
+  <div style="font-weight: 900; font-size: 18px;">لوحة تحكم وجهتي</div>
+  <button id="logoutBtn" class="logout-btn">تسجيل الخروج</button>
+</header>
+
+<div class="admin-wrapper">
+  
+  <div class="admin-tabs">
+    <button class="tab-btn active" onclick="switchTab('landmarkPanel')">إضافة معلم لمدينة</button>
+    <button class="tab-btn" onclick="switchTab('cityPanel')">إضافة مدينة جديدة</button>
+  </div>
+
+  <div id="landmarkPanel" class="admin-form-panel active">
+    <form id="adminLandmarkForm">
+      <h3>إضافة معلم جديد </h3>
+      <div class="form-group">
+        <label>اختر المدينة</label>
+        <select id="cityNameSlug" required>
+          <option value="jeddah">جدة</option>
+          <option value="riyadh">الرياض</option>
+          <option value="dubai">دبي</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>تصنيف المعلم</label>
+        <select id="landmarkCategory" required>
+          <option value="touristic">سياحي</option>
+          <option value="historical">تاريخي</option>
+          <option value="religious">ديني</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>اسم المعلم (بالعربي)</label>
+        <input type="text" id="landmarkNameAr" required>
+      </div>
+      <div class="form-group">
+        <label>اسم المعلم (بالإنجليزي)</label>
+        <input type="text" id="landmarkNameEn" required>
+      </div>
+      <div class="form-group">
+        <label>رابط صورة المعلم</label>
+        <input type="url" id="landmarkImage" placeholder="https://..." required>
+      </div>
+      <div class="form-group">
+        <label>الوصف (بالعربي)</label>
+        <textarea id="landmarkDescAr" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>الوصف (بالإنجليزي)</label>
+        <textarea id="landmarkDescEn" rows="3" required></textarea>
+      </div>
+      <button type="submit" class="save-btn">حفظ التغييرات</button>
+    </form>
+  </div>
+
+  <div id="cityPanel" class="admin-form-panel">
+    <form id="adminCityForm">
+      <h3>إضافة مدينة جديدة</h3>
+      <div class="form-group">
+        <label>اسم المدينة (بالعربي)</label>
+        <input type="text" id="newCityNameAr" placeholder="مثال: مكة المكرمة" required>
+      </div>
+      <div class="form-group">
+        <label>اسم المدينة (بالإنجليزي)</label>
+        <input type="text" id="newCityNameEn" placeholder="مثال: Makkah" required>
+      </div>
+      <div class="form-group">
+        <label>معرّف URL للمدينة (Slug) — يُملأ تلقائياً</label>
+        <input type="text" id="newCitySlug" placeholder="makkah" required
+               style="direction:ltr;text-align:left;">
+      </div>
+      <div class="form-group">
+        <label>رابط صورة الغلاف</label>
+        <input type="url" id="newCityHero" placeholder="https://..." required>
+      </div>
+      <button type="submit" class="save-btn">حفظ التغييرات</button>
+    </form>
+  </div>
+
+</div>
+
+<script type="module">
+  import { db, collection, addDoc, auth } from "./firebase-config.js";
+  import { signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  // دالة التبديل العلوية للأزرار
+  window.switchTab = function(panelId) {
+    document.querySelectorAll('.admin-form-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    document.getElementById(panelId).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  /* ============================================================
+     1️⃣ إرسال المعالم (Landmarks)
+     ============================================================ */
+  document.getElementById('adminLandmarkForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const cityKey = document.getElementById('cityNameSlug').value;
+    
+    const newLandmark = {
+      city: cityKey,
+      category: document.getElementById('landmarkCategory').value,
+      nameAr: document.getElementById('landmarkNameAr').value.trim(),
+      nameEn: document.getElementById('landmarkNameEn').value.trim(),
+      image: document.getElementById('landmarkImage').value.trim(),
+      descAr: document.getElementById('landmarkDescAr').value.trim(),
+      descEn: document.getElementById('landmarkDescEn').value.trim(),
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      await addDoc(collection(db, "landmarks"), newLandmark);
+      alert("تم إضافة المعلم بنجاح!");
+      document.getElementById('adminLandmarkForm').reset();
+    } catch (error) {
+      alert("حدث خطأ في الاتصال السحابي: " + error.message);
+    }
+  });
+
+  /* ============================================================
+     2️⃣ إرسال المدن الجديدة (Cities)
+     ============================================================ */
+  document.getElementById('adminCityForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const slugValue = document.getElementById('newCitySlug').value.toLowerCase().trim().replace(/\s+/g, '-') || document.getElementById('newCityNameEn').value.toLowerCase().trim().replace(/\s+/g, '-');
+    
+    const nameEnValue = document.getElementById('newCityNameEn').value.trim();
+
+    const newCity = {
+      slug: slugValue,
+      nameAr: document.getElementById('newCityNameAr').value.trim(),
+      nameEn: nameEnValue,
+      heroImage: document.getElementById('newCityHero').value.trim(),
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      await addDoc(collection(db, "cities"), newCity);
+      alert("تم إضافة المدينة بنجاح!");
+      
+      // كود اختياري: إضافة خيار المدينة ديناميكياً داخل القائمة العلوية فوراً دون ريفريش
+      const selectMenu = document.getElementById('cityNameSlug');
+      const option = document.createElement('option');
+      option.value = slugValue;
+      option.textContent = newCity.nameAr;
+      selectMenu.appendChild(option);
+
+      document.getElementById('adminCityForm').reset();
+    } catch (error) {
+      alert("حدث خطأ أثناء رفع المدينة: " + error.message);
+    }
+  });
+
+  /* ============================================================
+     🔐 تفعيل زر تسجيل الخروج والعودة للرئيسية فوراً
+     ============================================================ */
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async function(e) {
+      e.preventDefault();
+      try {
+        if (auth) {
+          await signOut(auth); // إنهاء الجلسة السحابية للأمان
+        }
+        window.location.href = "index.html"; // العودة فوراً للصفحة الرئيسية للموقع
+      } catch (error) {
+        window.location.href = "index.html"; // انتقال احتياطي في حال عدم الاتصال
+      }
+    });
+  }
+
+
+  /* ============================================================
+     ✨ تعبئة الـ Slug تلقائياً من الاسم الإنجليزي
+     ============================================================ */
+  const nameEnInput = document.getElementById('newCityNameEn');
+  const slugInput   = document.getElementById('newCitySlug');
+  if (nameEnInput && slugInput) {
+    nameEnInput.addEventListener('input', () => {
+      // حوّل "Makkah Al Mukarramah" → "makkah-al-mukarramah"
+      slugInput.value = nameEnInput.value
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '');
+    });
+  }
+</script>
+
+</body>
+</html>

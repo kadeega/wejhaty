@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>وجهتي | تفاصيل المدينة</title>
+<meta name="description" content="استكشف أهم المعالم الأثرية والدينية والسياحية في مدينتك المفضلة مع وجهتي.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;900&family=Tajawal:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="city-details.css">
+</head>
+<body>
+
+<!-- ===================== TOP BRAND BAR ===================== -->
+<header class="topbar">
+  <div class="topbar__inner">
+    <a href="index.html" class="topbar__logo" data-ar="وجهتي" data-en="Wajhati">وجهتي</a>
+    <a href="index.html" class="topbar__back">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span data-ar="كل المدن" data-en="All Cities">كل المدن</span>
+    </a>
+    <button class="lang-switch" id="langSwitch" aria-label="Switch language">
+      <span class="lang-switch__globe">🌐</span>
+      <span class="lang-switch__label" data-ar="EN" data-en="AR">EN</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===================== STICKY CATEGORY NAV (built by JS) ===================== -->
+<nav class="catnav" id="catNav" aria-label="تصنيفات المعالم">
+  <div class="catnav__inner" id="catNavInner">
+    <!-- tabs injected dynamically by city-details.js based on
+         the categories the current city actually has -->
+  </div>
+</nav>
+
+<!-- ===================== CITY HERO ===================== -->
+<section class="city-hero" id="cityHero">
+  <div class="city-hero__bg">
+    <img id="cityHeroImg" class="city-hero__img" src="" alt="">
+    <div class="city-hero__gradient"></div>
+  </div>
+  <div class="city-hero__content">
+    <p class="city-hero__tag" id="cityTag"></p>
+    <h1 class="city-hero__name" id="cityName"></h1>
+    <p class="city-hero__intro" id="cityIntro"></p>
+  </div>
+</section>
+
+<!-- ===================== LANDMARK SECTIONS (built by JS) ===================== -->
+<main id="landmarkSections">
+  <!-- one <section class="cat-section" data-category="..."> per
+       available category, each containing its landmark cards,
+       injected dynamically by city-details.js -->
+</main>
+
+<!-- ===================== NOT FOUND STATE (hidden unless needed) ===================== -->
+<section class="not-found" id="notFound" hidden>
+  <div class="not-found__inner">
+    <span class="not-found__icon">🧭</span>
+    <h2 data-ar="لم نجد هذه المدينة بعد" data-en="We haven't mapped this city yet">لم نجد هذه المدينة بعد</h2>
+    <p data-ar="جدة، الرياض، ودبي متاحة الآن. المزيد من المدن في الطريق قريباً."
+       data-en="Jeddah, Riyadh, and Dubai are available right now. More cities are on the way soon.">
+       جدة، الرياض، ودبي متاحة الآن. المزيد من المدن في الطريق قريباً.
+    </p>
+    <a href="index.html" class="not-found__btn" data-ar="العودة إلى الرئيسية" data-en="Back to Home">العودة إلى الرئيسية</a>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="footer__inner">
+    <span class="footer__logo">وجهتي</span>
+    <p class="footer__tag" data-ar="عراقة الماضي، جمال الحاضر" data-en="Heritage of the past, beauty of the present">عراقة الماضي، جمال الحاضر</p>
+    <p class="footer__copy" data-ar="© 2026 وجهتي. جميع الحقوق محفوظة." data-en="© 2026 Wajhati. All rights reserved.">© 2026 وجهتي. جميع الحقوق محفوظة.</p>
+  </div>
+</footer>
+
+<script src="city-data.js"></script>
+<script type="module" src="city-details.js"></script></body>
+</html>
